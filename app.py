@@ -1,41 +1,29 @@
+from datetime import datetime
+from datetime import timezone
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route('/')
-def index():
+
+@app.route('/api/', methods=['GET'])
+def api():
     """ Render a JSON response. """
-    return jsonify(
-        slackUsername="Pythonian",
-        backend=True,
-        age=27,
-        bio="An introvert that likes to make things happen on the web.")
+    slack_name = request.args.get('slack_name', None)
+    track = request.args.get('track', None)
 
-
-@app.route('/calculate/', methods=['POST'])
-def calculate():
-    x = request.json.get('x', None)
-    y = request.json.get('y', None)
-    operation_type = request.json.get('operation_type', None)
-
-    if operation_type is not None and x is not None and y is not None:
-        if operation_type == "addition":
-            result = x + y
-        elif operation_type == "subtraction":
-            result = x - y
-        elif operation_type == "multiplication":
-            result = x * y
-        else:
-            result = None
-    else:
-        return None
+    current_day_of_week = datetime.utcnow().strftime('%A')
+    utc_time = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
     return jsonify(
-        slackUsername="Pythonian",
-        operation_type=operation_type,
-        result=result)
+        slack_name=slack_name,
+        current_day=current_day_of_week,
+        utc_time=utc_time,
+        track=track,
+        github_file_url="https://github.com/Pythonian/apiendpoint/blob/main/app.py",
+        github_repo_url="https://github.com/Pythonian/apiendpoint",
+        status_code=200)
 
 
 if __name__ == '__main__':
