@@ -21,12 +21,12 @@ Set up a basic web server in your preferred stack. Deploy it to any free hosting
 To access the endpoint, open your browser and visit the following URL:
 
 ```bash
-https://seyipythonian.pythonanywhere.com/api/hello?visitor_name=YourName
+https://seyipythonian.pythonanywhere.com/api/hello?visitor_name="YourName"
 ```
 
 Replace `YourName` with your desired name.
 
-To test with the name "Sapagrammer", the URL will be: <https://seyipythonian.pythonanywhere.com/api/hello?visitor_name=Sapagrammer>
+To test with the name "Sapagrammer", the URL will be: <https://seyipythonian.pythonanywhere.com/api/hello?visitor_name="Sapagrammer">
 
 The response will be in JSON format and will include:
 
