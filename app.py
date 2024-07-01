@@ -5,7 +5,6 @@ to greet visitors and give the current temperature in their location.
 
 import os
 import logging
-from typing import Tuple
 
 from flask import Flask, request, jsonify
 import requests
@@ -41,7 +40,6 @@ def get_client_ip() -> str:
         str: The client's IP address.
     """
     if request.headers.get('X-Forwarded-For'):
-        # X-Forwarded-For header format: client, proxy1, proxy2, ...
         client_ip = request.headers.get('X-Forwarded-For').split(',')[0].strip()
     else:
         client_ip = request.remote_addr
@@ -50,7 +48,7 @@ def get_client_ip() -> str:
         client_ip = get_public_ip()
     return client_ip
 
-def get_location_and_temperature(ip: str) -> Tuple[str, str]:
+def get_location_and_temperature(ip: str) -> tuple[str, str]:
     """
     Retrieves the location and temperature for a given IP address.
 
@@ -58,7 +56,7 @@ def get_location_and_temperature(ip: str) -> Tuple[str, str]:
         ip (str): The IP address to look up.
 
     Returns:
-        Tuple[str, str]: A tuple containing the city and temperature.
+        tuple[str, str]: A tuple containing the city and temperature.
     """
     api_key = weatherapi_key
     url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q={ip}'
@@ -87,7 +85,7 @@ def hello() -> str:
     Returns:
         str: A JSON response containing the client's IP, location, and greeting.
     """
-    visitor_name = request.args.get('visitor_name', 'Guest')
+    visitor_name = request.args.get("visitor_name", "Guest").strip('"')
     client_ip = get_client_ip()
     location, temperature = get_location_and_temperature(client_ip)
     greeting = f"Hello, {visitor_name}!, the temperature is {temperature} degrees Celsius in {location}"
