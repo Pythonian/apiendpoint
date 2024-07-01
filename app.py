@@ -17,23 +17,16 @@ weatherapi_key = os.getenv("WEATHERAPI_KEY")
 
 app = Flask(__name__)
 
-# def get_public_ip() -> str:
-#     """
-#     Retrieves the public IP address of the server.
+def get_public_ip() -> str:
+    """
+    Retrieves the public IP address of the server.
 
-#     Returns:
-#         str: The public IP address.
-#     """
-#     response = requests.get('https://api.ipify.org?format=json')
-#     data = response.json()
-#     return data['ip']
-def get_client_ip():
-    if request.headers.get('X-Forwarded-For'):
-        # X-Forwarded-For header format: client, proxy1, proxy2, ...
-        client_ip = request.headers.get('X-Forwarded-For').split(',')[0].strip()
-    else:
-        client_ip = request.remote_addr
-    return client_ip
+    Returns:
+        str: The public IP address.
+    """
+    response = requests.get('https://api.ipify.org?format=json')
+    data = response.json()
+    return data['ip']
 
 def get_location_and_temperature(ip: str) -> tuple[str, str]:
     """
@@ -70,7 +63,7 @@ def hello() -> str:
         str: A JSON response containing the client's IP, location, and greeting.
     """
     visitor_name = request.args.get('visitor_name', 'Guest')
-    client_ip = get_client_ip()
+    client_ip = get_public_ip()
     location, temperature = get_location_and_temperature(client_ip)
     greeting = f"Hello, {visitor_name}!, the temperature is {temperature} degrees Celsius in {location}"
     return jsonify({
