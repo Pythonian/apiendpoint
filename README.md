@@ -1,45 +1,237 @@
-# HNG 11 Backend Stage 1 Task
+# HNG 11 Backend Stage 2 Task: User Authentication & Organisation
 
-## Task Objective
+### Walkthrough for Testing API Endpoints
 
-Set up a basic web server in your preferred stack. Deploy it to any free hosting platform and expose an API endpoint that conforms to the criteria below:
+#### 1. **Register User**
 
-- Endpoint: [GET] `<example.com>/api/hello?visitor_name="Mark"` (where `<example.com>` is your server origin)
+- **Endpoint**: `POST /auth/register/`
+- **Description**: Registers a new user and creates a default organisation for the user.
+- **Request Body**:
 
-**Response**
+  ```json
+  {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "johndoe@example.com",
+      "password": "password123"
+  }
+  ```
 
-```json
-{
-  "client_ip": "127.0.0.1", // The IP address of the requester
-  "location": "New York", // The city of the requester
-  "greeting": "Hello, Mark!, the temperature is 11 degrees Celsius in New York"
-}
-```
+- **Successful Response**:
 
-### Testing the Submission
+  ```json
+  {
+      "status": "success",
+      "message": "Registration successful",
+      "data": {
+          "accessToken": "access_token_here",
+          "user": {
+              "userId": "user_id_here",
+              "firstName": "John",
+              "lastName": "Doe",
+              "email": "johndoe@example.com"
+          }
+      }
+  }
+  ```
 
-To access the endpoint, open your browser and visit the following URL:
+#### 2. **Login User**
 
-```bash
-https://seyipythonian.pythonanywhere.com/api/hello?visitor_name="YourName"
-```
+- **Endpoint**: `POST /auth/login/`
+- **Description**: Logs in a user with their email and password.
+- **Request Body**:
 
-Replace `YourName` with your desired name.
+  ```json
+  {
+      "email": "johndoe@example.com",
+      "password": "password123"
+  }
+  ```
 
-To test with the name "Sapagrammer", the URL will be: <https://seyipythonian.pythonanywhere.com/api/hello?visitor_name="Sapagrammer">
+- **Successful Response**:
 
-The response will be in JSON format and will include:
+  ```json
+  {
+      "status": "success",
+      "message": "Login successful",
+      "data": {
+          "accessToken": "access_token_here",
+          "user": {
+              "userId": "user_id_here",
+              "firstName": "John",
+              "lastName": "Doe",
+              "email": "johndoe@example.com"
+          }
+      }
+  }
+  ```
 
-- client_ip: Your public IP address.
-- location: The city corresponding to your IP address.
-- greeting: A personalized greeting message including your name and the current temperature in your location.
+#### 3. **Get User Information**
 
-**Example response**
+- **Endpoint**: `GET /users/:id`
+- **Description**: Retrieves user information. Requires authentication.
+- **Headers**:
+  - `Authorization`: Bearer `access_token_here`
+- **Successful Response**:
 
-```json
-{
-  "client_ip":"197.220.45.88",
-  "greeting":"Hello, Sapagrammer!, the temperature is 26.1 degrees Celsius in Lagos",
-  "location":"Lagos"
-}
-```
+  ```json
+  {
+      "status": "success",
+      "message": "User retrieved successfully",
+      "user": {
+          "userId": "user_id_here",
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "johndoe@example.com"
+      }
+  }
+  ```
+
+#### 4. **Get User's Organisations**
+
+- **Endpoint**: `GET /organisations`
+- **Description**: Retrieves all organisations the authenticated user belongs to. Requires authentication.
+- **Headers**:
+  - `Authorization`: Bearer `access_token_here`
+- **Successful Response**:
+
+  ```json
+  {
+      "status": "success",
+      "message": "Organisations retrieved successfully",
+      "data": {
+          "organisations": [
+              {
+                  "orgId": "organisation_id_here",
+                  "name": "John's Organisation",
+                  "description": "Default organisation"
+              }
+          ]
+      }
+  }
+  ```
+
+#### 5. **Get Specific Organisation**
+
+- **Endpoint**: `GET /organisations/:orgId`
+- **Description**: Retrieves details of a specific organisation. Requires authentication.
+- **Headers**:
+  - `Authorization`: Bearer `access_token_here`
+- **Successful Response**:
+
+  ```json
+  {
+      "status": "success",
+      "message": "Organisation retrieved successfully",
+      "data": {
+          "orgId": "organisation_id_here",
+          "name": "John's Organisation",
+          "description": "Default organisation"
+      }
+  }
+  ```
+
+#### 6. **Create New Organisation**
+
+- **Endpoint**: `POST /organisations`
+- **Description**: Creates a new organisation and adds the authenticated user to it. Requires authentication.
+- **Headers**:
+  - `Authorization`: Bearer `access_token_here`
+- **Request Body**:
+
+  ```json
+  {
+      "name": "New Organisation",
+      "description": "This is a new organisation"
+  }
+  ```
+
+- **Successful Response**:
+
+  ```json
+  {
+      "status": "success",
+      "message": "Organisation created successfully",
+      "data": {
+          "orgId": "organisation_id_here",
+          "name": "New Organisation",
+          "description": "This is a new organisation"
+      }
+  }
+  ```
+
+#### 7. **Add User to Organisation**
+
+- **Endpoint**: `POST /organisations/:orgId/users`
+- **Description**: Adds a user to a specific organisation. The endpoint is not protected and can be accessed publicly.
+- **Request Body**:
+
+  ```json
+  {
+      "userId": "user_id_here"
+  }
+  ```
+
+- **Successful Response**:
+
+  ```json
+  {
+      "status": "success",
+      "message": "User added to organisation successfully"
+  }
+  ```
+
+#### 8. **Common Error Responses**
+
+- **Validation Error**:
+
+  ```json
+  {
+      "status": "Bad request",
+      "message": "Validation failed",
+      "errors": [
+          {
+              "field": "email",
+              "message": "This field is required."
+          }
+      ]
+  }
+  ```
+
+- **Authentication Failed**:
+
+  ```json
+  {
+      "status": "Bad request",
+      "message": "Authentication failed",
+      "statusCode": 401
+  }
+  ```
+
+- **Forbidden**:
+
+  ```json
+  {
+      "status": "Forbidden",
+      "message": "You do not have permission to view this resource",
+      "statusCode": 403
+  }
+  ```
+
+- **Not Found**:
+
+  ```json
+  {
+      "status": "Not found",
+      "message": "Resource not found",
+      "statusCode": 404
+  }
+  ```
+
+### How to Use This Walkthrough
+
+1. **Base URL**: Ensure all requests are made to the base URL `https://seyipythonian.pythonanywhere.com/`.
+2. **Authentication**: For endpoints that require authentication, use the `accessToken` received from the register or login endpoints.
+3. **Headers**: Include `Content-Type: application/json` in headers where applicable.
+4. **Request Body**: Use the example request bodies provided for each endpoint.
+5. **Handling Responses**: Check the response status codes and body to ensure the request was successful or to understand any errors.
