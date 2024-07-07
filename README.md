@@ -2,236 +2,205 @@
 
 ### Walkthrough for Testing API Endpoints
 
+**Base URL**: All requests to be made through `https://seyipythonian.pythonanywhere.com/`
+
 #### 1. **Register User**
 
-- **Endpoint**: `POST /auth/register/`
+- **Endpoint**: `POST /auth/register`
 - **Description**: Registers a new user and creates a default organisation for the user.
 - **Request Body**:
 
-  ```json
-  {
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "johndoe@example.com",
-      "password": "password123"
-  }
-  ```
+```json
+{
+    "firstName": "Mark",
+    "lastName": "Essien",
+    "email": "markessien@hng.com",
+    "password": "hngelevensucks",
+    "phone": "09001234567"
+}
+```
 
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "Registration successful",
-      "data": {
-          "accessToken": "access_token_here",
-          "user": {
-              "userId": "user_id_here",
-              "firstName": "John",
-              "lastName": "Doe",
-              "email": "johndoe@example.com"
-          }
-      }
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "Registration successful",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIwMzcxODgyLCJpYXQiOjE3MjAzNzE1ODIsImp0aSI6ImE2ZjBjOWE3NjM5NzQzNmM5ZmFmMTQxNzVjZWQ0OWI3IiwidXNlcklkIjoiNThlYzhiNjctYTA1Yy00NjA4LThhMjAtMzkxMGI3OTUzMDUzIn0.rbS_TFk5tQ2hz9coD5814yP8lYaypGo7h8Q-wdD-Uq4",
+        "user": {
+            "userId": "58ec8b67-a05c-4608-8a20-3910b7953053",
+            "firstName": "Mark",
+            "lastName": "Essien",
+            "email": "markessien@hng.com",
+            "phone": "09001234567"
+        }
+    }
+}
+```
+
+- **Validation Error Response**:
+
+```json
+{
+    "errors": [
+        {
+            "field": "string",
+            "message": "string"
+        }
+    ]
+}
+```
 
 #### 2. **Login User**
 
-- **Endpoint**: `POST /auth/login/`
+- **Endpoint**: `POST /auth/login`
 - **Description**: Logs in a user with their email and password.
 - **Request Body**:
 
-  ```json
-  {
-      "email": "johndoe@example.com",
-      "password": "password123"
-  }
-  ```
+```json
+{
+    "email": "markessien@hng.com",
+    "password": "hngelevensucks"
+}
+```
 
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "Login successful",
-      "data": {
-          "accessToken": "access_token_here",
-          "user": {
-              "userId": "user_id_here",
-              "firstName": "John",
-              "lastName": "Doe",
-              "email": "johndoe@example.com"
-          }
-      }
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "Login successful",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIwMzcxODgyLCJpYXQiOjE3MjAzNzE1ODIsImp0aSI6ImE2ZjBjOWE3NjM5NzQzNmM5ZmFmMTQxNzVjZWQ0OWI3IiwidXNlcklkIjoiNThlYzhiNjctYTA1Yy00NjA4LThhMjAtMzkxMGI3OTUzMDUzIn0.rbS_TFk5tQ2hz9coD5814yP8lYaypGo7h8Q-wdD-Uq4",
+        "user": {
+            "userId": "58ec8b67-a05c-4608-8a20-3910b7953053",
+            "firstName": "Mark",
+            "lastName": "Essien",
+            "email": "markessien@hng.com",
+            "phone": "09001234567"
+        }
+    }
+}
+```
 
 #### 3. **Get User Information**
 
-- **Endpoint**: `GET /users/:id`
+- **Endpoint**: `GET /api/users/:id`
 - **Description**: Retrieves user information. Requires authentication.
 - **Headers**:
-  - `Authorization`: Bearer `access_token_here`
+  - `Authorization`: Bearer Token
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "User retrieved successfully",
-      "user": {
-          "userId": "user_id_here",
-          "firstName": "John",
-          "lastName": "Doe",
-          "email": "johndoe@example.com"
-      }
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "User retrieved successfully",
+    "user": {
+        "userId": "58ec8b67-a05c-4608-8a20-3910b7953053",
+        "firstName": "Mark",
+        "lastName": "Essien",
+        "email": "markessien@hng.com"
+    }
+}
+```
 
 #### 4. **Get User's Organisations**
 
-- **Endpoint**: `GET /organisations`
+- **Endpoint**: `GET /api/organisations`
 - **Description**: Retrieves all organisations the authenticated user belongs to. Requires authentication.
 - **Headers**:
-  - `Authorization`: Bearer `access_token_here`
+  - `Authorization`: Bearer Token
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "Organisations retrieved successfully",
-      "data": {
-          "organisations": [
-              {
-                  "orgId": "organisation_id_here",
-                  "name": "John's Organisation",
-                  "description": "Default organisation"
-              }
-          ]
-      }
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "Organisations retrieved successfully",
+    "data": {
+        "organisations": [
+            {
+                "orgId": "58ec8b67-b16r-4608-8a20-3910b7953099",
+                "name": "Mark's Organisation",
+                "description": "Default organisation"
+            }
+        ]
+    }
+}
+```
 
 #### 5. **Get Specific Organisation**
 
-- **Endpoint**: `GET /organisations/:orgId`
+- **Endpoint**: `GET /api/organisations/:orgId`
 - **Description**: Retrieves details of a specific organisation. Requires authentication.
 - **Headers**:
-  - `Authorization`: Bearer `access_token_here`
+  - `Authorization`: Bearer Token
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "Organisation retrieved successfully",
-      "data": {
-          "orgId": "organisation_id_here",
-          "name": "John's Organisation",
-          "description": "Default organisation"
-      }
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "Organisation retrieved successfully",
+    "data": {
+        "orgId": "58ec8b67-b16r-4608-8a20-3910b7953099",
+        "name": "Mark's Organisation",
+        "description": "Default organisation"
+    }
+}
+```
 
 #### 6. **Create New Organisation**
 
-- **Endpoint**: `POST /organisations`
+- **Endpoint**: `POST /api/organisations`
 - **Description**: Creates a new organisation and adds the authenticated user to it. Requires authentication.
 - **Headers**:
-  - `Authorization`: Bearer `access_token_here`
+  - `Authorization`: Bearer Token
 - **Request Body**:
 
-  ```json
-  {
-      "name": "New Organisation",
-      "description": "This is a new organisation"
-  }
-  ```
+```json
+{
+    "name": "New Organisation",
+    "description": "This is a new organisation"
+}
+```
 
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "Organisation created successfully",
-      "data": {
-          "orgId": "organisation_id_here",
-          "name": "New Organisation",
-          "description": "This is a new organisation"
-      }
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "Organisation created successfully",
+    "data": {
+        "orgId": "58ec8b67-a5y7-4608-11a7-3910b7953011",
+        "name": "New Organisation",
+        "description": "This is a new organisation"
+    }
+}
+```
 
 #### 7. **Add User to Organisation**
 
-- **Endpoint**: `POST /organisations/:orgId/users`
+- **Endpoint**: `POST /api/organisations/:orgId/users`
 - **Description**: Adds a user to a specific organisation. The endpoint is not protected and can be accessed publicly.
 - **Request Body**:
 
-  ```json
-  {
-      "userId": "user_id_here"
-  }
-  ```
+```json
+{
+    "userId": "45ec8b67-r5t7-4608-8a20-3910b7958760"
+}
+```
 
 - **Successful Response**:
 
-  ```json
-  {
-      "status": "success",
-      "message": "User added to organisation successfully"
-  }
-  ```
+```json
+{
+    "status": "success",
+    "message": "User added to organisation successfully"
+}
+```
 
-#### 8. **Common Error Responses**
+### Running Tests
 
-- **Validation Error**:
-
-  ```json
-  {
-      "status": "Bad request",
-      "message": "Validation failed",
-      "errors": [
-          {
-              "field": "email",
-              "message": "This field is required."
-          }
-      ]
-  }
-  ```
-
-- **Authentication Failed**:
-
-  ```json
-  {
-      "status": "Bad request",
-      "message": "Authentication failed",
-      "statusCode": 401
-  }
-  ```
-
-- **Forbidden**:
-
-  ```json
-  {
-      "status": "Forbidden",
-      "message": "You do not have permission to view this resource",
-      "statusCode": 403
-  }
-  ```
-
-- **Not Found**:
-
-  ```json
-  {
-      "status": "Not found",
-      "message": "Resource not found",
-      "statusCode": 404
-  }
-  ```
-
-### How to Use This Walkthrough
-
-1. **Base URL**: Ensure all requests are made to the base URL `https://seyipythonian.pythonanywhere.com/`.
-2. **Authentication**: For endpoints that require authentication, use the `accessToken` received from the register or login endpoints.
-3. **Headers**: Include `Content-Type: application/json` in headers where applicable.
-4. **Request Body**: Use the example request bodies provided for each endpoint.
-5. **Handling Responses**: Check the response status codes and body to ensure the request was successful or to understand any errors.
+```python
+    python manage.py test accounts/tests
+```
